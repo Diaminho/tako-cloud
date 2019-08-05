@@ -1,9 +1,24 @@
 package com.example.tacocloud.entity;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+@Entity
+@Table(name = "Ingredients")
 public class Ingredient {
+  @Id
   private String id;
+  @Column (name = "name")
   private String name;
+  @JoinColumn(name="type_id")
+  @ManyToOne(targetEntity = Type.class, fetch = FetchType.LAZY)
   private Type type;
+
+  @ManyToMany(mappedBy = "ingredients")
+  private List<Taco> tacos = new ArrayList<>();
 
   public Ingredient() {
   }
@@ -38,7 +53,11 @@ public class Ingredient {
     this.type = type;
   }
 
-  public static enum Type {
-    WRAP, PROTEIN, VEGGIES, CHEESE, SAUCE
+  public List<Taco> getTacos() {
+    return tacos;
+  }
+
+  public void setTacos(List<Taco> tacos) {
+    this.tacos = tacos;
   }
 }
